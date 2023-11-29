@@ -23,6 +23,7 @@ v_lex (VObject *object, char *str)
   VLexerState state = v_lexer_start;
   VBuffer *buffer = v_newBuffer (object);
   VLexerState top_level_state = v_lexer_start;
+  VLexerState string_past_state = v_lexer_start;
 
   if (!buffer)
     {
@@ -118,6 +119,19 @@ v_lex (VObject *object, char *str)
           state = v_lexer_ignorant;
         }
 
+      else if (c == '\'' && state != v_lexer_simple_literal)
+        {
+          v_appendBuffer (buffer, c);
+          string_past_state = state;
+          state = v_lexer_simple_literal;
+        }
+
+      else if (c == '\'' && state == v_lexer_simple_literal)
+        {
+          state = string_past_state;
+          v_appendBuffer (buffer, c);
+        }
+
       else if ((c == VTOKEN_PARAM_SEPARATOR || i == len - 1 || c == '\n')
                && state == v_lexer_param) /* R1,0x42 */
         {
@@ -147,6 +161,11 @@ v_lex (VObject *object, char *str)
               && state != v_lexer_simple_literal && !ispunct (c))
             v_appendBuffer (buffer,
                             c); /* append the charaacter to the buffer*/
+
+          if (state == v_lexer_simple_literal)
+            {
+              v_appendBuffer (buffer, c);
+            }
         }
     }
 
