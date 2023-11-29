@@ -1,8 +1,9 @@
 # Copyright 2019-2023 Kai D. Gonzalez
 # more code here ...
 
-@g:
-  echo 'B'
-  ret
+@8:
+  echo 0x47
+
 @m:
   echo 'A'
+  jmp 8
