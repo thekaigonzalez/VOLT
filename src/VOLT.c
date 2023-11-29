@@ -11,11 +11,11 @@
 #include <stdio.h>
 #include <string.h>
 
-VCodeGen_Node standard[] = { { "null", 00, v_compiler_std },
-                             { "echo", 40, v_compiler_std },
-                             { "hlt", 22, v_compiler_std },
-                             { "esub", 11, v_compiler_nexfuse },
-                             { "jmp", 15, v_compiler_nexfuse } };
+VCodeGen_Node standard[]
+    = { { "null", 00, v_compiler_std },    { "echo", 40, v_compiler_std },
+        { "hlt", 22, v_compiler_std },     { "init", 100, v_compiler_std },
+        { "ret", 11, v_compiler_nexfuse }, { "jmp", 15, v_compiler_nexfuse },
+        { "use", 70, v_compiler_nexfuse } };
 
 int
 main (int argc, char *argv[])
@@ -25,7 +25,7 @@ main (int argc, char *argv[])
   argw_init ();
 
   argw_flag ('o', "output", "Output directory", WString);
-  argw_flag ('c', "compiler", "The compiler to use with VOLT", WString);
+  argw_flag ('W', "compiler", "The compiler to use with VOLT", WString);
 
   argw_default ('o', "a.bin");
   argw_default ('c', "any");
@@ -43,7 +43,7 @@ main (int argc, char *argv[])
     }
 
   char *filname = argw_positional (0);
-  char *compiler = argw_str ('c');
+  char *compiler = argw_str ('W');
   char *output_f = argw_str ('o');
 
   VCompilerSupport chosenCompiler = v_compiler_any;
