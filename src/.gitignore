@@ -1,2 +1,5 @@
 p_tests
 volt
+*.bin
+*.fuse
+*.exe
