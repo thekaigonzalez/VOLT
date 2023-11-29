@@ -253,6 +253,7 @@ v_generateByteCode (VObject *object, VList *tokens, VCodeGen_Node *_functions,
         }
       v_appendByteCode (main, 0);
     }
+
   if (compiler == v_compiler_openlud)
     {
       v_appendByteCode (main, 12); // END in OpenLUD
