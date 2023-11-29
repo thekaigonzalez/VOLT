@@ -6,7 +6,7 @@
   mov R1, 'l'
   mov R1, 'l'
   mov R1, 'o'
-  mov R1, 0x0a
+  mov R1, ' '
 
 @2:
   mov R1, 'W'
