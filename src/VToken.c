@@ -158,6 +158,11 @@ v_valueToByte (VToken *token)
       return 0;
     }
 
+  if (v_valueIsNil (v_tokenToValue (token)))
+    {
+      return -127;
+    }
+
   if (v_valueIsCharLiteral (v_tokenToValue (token)))
     {
       return (byte)v_valueCharLiteral (v_tokenToValue (token));
