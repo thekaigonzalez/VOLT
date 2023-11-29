@@ -55,7 +55,9 @@ v_newValueFromString (VObject *object, char *str)
           v->type = v_nil;
           v->nil = 1;
         }
-      else if (str[0] == 'R' || str[0] == 'r') /* registers */
+      else if (str[0] == 'R'
+               || str[0] == 'r' && strlen (str) > 1
+                      && isdigit (str[1])) /* registers */
         {
           v->type = v_number;
           v->number = strtoull (str + 1, NULL, 10);
