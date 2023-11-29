@@ -176,11 +176,13 @@ test_codegen (void)
 
   VBuffer *buf = v_newBuffer (env);
 
-  VList *l = v_lex (env, "# hello\nm:\n\thalt R1,0x01\nf:\n\thalt");
+  VList *l = v_lex (env, "# hello\nz:\n\tmov R1,0x46\n\thlt");
 
   v_listPrint (l);
 
-  VCodeGen_Node fns[] = { { "halt", 22, v_compiler_std }, { NULL, 0, 0 } };
+  VCodeGen_Node fns[] = { { "mov", 41, v_compiler_std },
+                          { "hlt", 22, v_compiler_std },
+                          { NULL, 0, 0 } };
 
   VByteCode *finished = v_generateByteCode (env, l, fns, v_compiler_nexfuse);
 

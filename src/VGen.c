@@ -3,15 +3,6 @@
 #include <stdio.h>
 #include <string.h>
 
-struct VByteCode
-{
-  VObject *object;
-  byte *code;
-  int size;
-  int capacity;
-  int ptr;
-};
-
 byte
 v_findStandardFunction (char *id, VCodeGen_Node *_functions)
 {
@@ -106,7 +97,7 @@ v_byteCodePrint (VByteCode *code)
     }
   for (int i = 0; i < code->size; i++)
     {
-      printf ("%d ", code->code[i]);
+      printf ("%d,", code->code[i]);
     }
 
   printf ("\n");
@@ -122,8 +113,10 @@ v_generateByteCode (VObject *object, VList *tokens, VCodeGen_Node *_functions,
     }
 
   VByteCode *main = v_newByteCode ((object));
+  VByteCode *tmp = v_newByteCode ((object));
 
   int pc = 0;
+  int previous = 0;
 
   for (int i = 0; i < v_listSize (tokens); i++)
     {
@@ -133,7 +126,6 @@ v_generateByteCode (VObject *object, VList *tokens, VCodeGen_Node *_functions,
         {
           if (v_tokenType (token) == v_token_subr_header && pc == 0)
             {
-            subroutine:
               // begin warnings
               if (compiler != v_compiler_std || compiler != v_compiler_any)
                 {
@@ -160,20 +152,33 @@ v_generateByteCode (VObject *object, VList *tokens, VCodeGen_Node *_functions,
 
               // VValue *value = v_tokenToValue (token);
 
-              v_appendByteCode (main, 10);
-              v_appendByteCode (main, v_valueToByte (token));
-
+              if (v_valueToByte (token) != 'm') /* main */
+                {
+                  v_appendByteCode (main, 10);
+                  v_appendByteCode (main, v_valueToByte (token));
+                }
               pc++;
             }
 
           else if (v_tokenType (token) == v_token_subr_header && pc == 1)
             {
-              v_appendByteCode (main, 0);  // END
+              if (v_valueToByte (token) != 'm') /* main */
+                {
+                  v_appendByteCode (main, 10); // SUB
+                  v_appendByteCode (main, v_valueToByte (token));
+                }
+            }
+
+          else if (v_tokenType (token) == v_token_ident
+                   && strcmp (v_tokenName (token), "ret") == 0)
+            {
+              v_appendByteCode (main, 22); // END
               v_appendByteCode (main, 11); // ENDSUB
             }
 
           else if (v_tokenType (token) == v_token_ident && pc == 1)
             {
+
               byte fn
                   = v_findStandardFunction (v_tokenName (token), _functions);
 
@@ -181,19 +186,59 @@ v_generateByteCode (VObject *object, VList *tokens, VCodeGen_Node *_functions,
                 {
                   printf ("error: function is not found, `%s'\n",
                           v_tokenName (token));
+                  exit (1);
                 }
 
-              v_appendByteCode (main, fn);
+              pc = 2;
+
+              v_appendByteCode (tmp, fn);
+            }
+
+          else if (v_tokenType (token) == v_token_ident && pc == 2)
+            {
+              v_appendByteCode (tmp, v_valueToByte (token));
+
+              byte fn
+                  = v_findStandardFunction (v_tokenName (token), _functions);
+
+              if (fn == -127)
+                {
+                  printf ("error: function is not found, `%s'\n",
+                          v_tokenName (token));
+                  exit (1);
+                }
+
+              for (int j = 0; j < v_byteCodeLength (tmp); j++)
+                {
+                  v_appendByteCode (main, (tmp->code[j]));
+                }
+
+              v_appendByteCode (main, 0);
+
+              memset (tmp->code, 0, tmp->capacity);
+
+              tmp->size = 0;
+
+              pc = 1;
             }
           else
             {
-              if (pc == 1)
+              if (pc == 2 && v_tokenType (token) == v_token_param)
                 {
-                  v_appendByteCode (main, v_valueToByte (token));
+                  v_appendByteCode (tmp, v_valueToByte (token));
                 }
             }
         }
     }
+  if (tmp->size > 0)
+    {
+      for (int j = 0; j < v_byteCodeLength (tmp); j++)
+        {
+          v_appendByteCode (main, (tmp->code[j]));
+        }
+      v_appendByteCode (main, 0);
+    }
+  v_appendByteCode (main, 22);
 
   return main;
 }

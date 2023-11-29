@@ -45,6 +45,15 @@ byte v_findStandardFunction (char *id, VCodeGen_Node *_functions);
 /* find a function's compiler support in a list of VCodeGen_Nodes*/
 VCompilerSupport v_findStandardCompiler (char *id, VCodeGen_Node *_functions);
 
+struct VByteCode
+{
+  VObject *object;
+  byte *code;
+  int size;
+  int capacity;
+  int ptr;
+};
+
 typedef struct VByteCode VByteCode;
 
 VByteCode *v_newByteCode (VObject *object);

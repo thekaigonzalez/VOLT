@@ -34,13 +34,12 @@ v_lex (VObject *object, char *str)
   for (int i = 0; i < len; i++)
     {
       char c = str[i];
-      printf ("%c\n", c);
 
       if (c == VTOKEN_SUB_DEF
           && (state == v_lexer_start || state == v_lexer_legacy_header
-              || state == v_lexer_subroutine)) /* header: */
+              || state == v_lexer_subroutine
+              || state == v_lexer_param)) /* header: */
         {
-          printf ("buffer: %s\n", v_copyBuffer (buffer));
           if (v_bufferLength (buffer) <= 0)
             {
               continue;
@@ -91,10 +90,9 @@ v_lex (VObject *object, char *str)
           state = v_lexer_legacy_header;
         }
 
-      else if (i == len - 1
-               || c == '\n'
-                      && state == v_lexer_subroutine) /* functions without
-                                                               parameters */
+      else if ((i == len - 1 || c == '\n')
+               && state == v_lexer_subroutine) /* functions without
+                                                        parameters */
         {
           if (v_bufferLength (buffer) <= 0)
             {
@@ -104,6 +102,7 @@ v_lex (VObject *object, char *str)
             {
               v_appendBuffer (buffer, c);
             }
+
           v_listAddToken (
               list,
               v_newTokenPreset (object, v_copyBuffer (buffer), v_token_ident));

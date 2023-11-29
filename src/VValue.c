@@ -55,6 +55,16 @@ v_newValueFromString (VObject *object, char *str)
           v->type = v_nil;
           v->nil = 1;
         }
+      else if (str[0] == 'R' || str[0] == 'r') /* registers */
+        {
+          v->type = v_number;
+          v->number = strtoull (str + 1, NULL, 10);
+        }
+      else if (str[0] == '0' && (str[1] == 'x')) /* obviously for base 16*/
+        {
+          v->type = v_number;
+          v->number = strtoull (str, NULL, 16);
+        }
       else if (isalpha (str[0]))
         {
           v->number = str[0];
@@ -68,11 +78,6 @@ v_newValueFromString (VObject *object, char *str)
           v->number = strtoull (str, NULL, 10); /* base 10 number*/
         }
 
-      else if (str[0] == '0' && (str[1] == 'x')) /* obviously for base 16*/
-        {
-          v->type = v_number;
-          v->number = strtoull (str, NULL, 16);
-        }
       else if (strcmp (str, "nil") == 0)
         {
           v->type = v_nil;
