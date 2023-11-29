@@ -1,6 +1,9 @@
 ; $Id: put.asm
 
 main:
+  int R1
+  int R2
+
 ; push 0x41 to reg 1 at 1
   push R1,0x41,1
 ; push 0x0a to reg 1 at 2
@@ -12,4 +15,3 @@ main:
   
 ; print out each byte in reg 2
   each R2
-
