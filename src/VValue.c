@@ -72,6 +72,37 @@ v_newValueFromString (VObject *object, char *str)
           v->number = str[0];
           v->type = v_char_literal;
         }
+
+      else if (str[0] == '\'')
+        {
+          if (strlen (str) == 1) /* empty string */
+            {
+              v->type = v_nil;
+              v->nil = 1;
+
+              return v;
+            }
+          v->type = v_char_literal;
+          if (str[1] == '\\')
+            {
+              switch (str[2])
+                {
+                case 'n':
+                  v->literal = '\n';
+                  break;
+                case 't':
+                  v->literal = '\t';
+                  break;
+                case 'r':
+                  v->literal = '\r';
+                  break;
+                }
+            }
+          else
+            {
+              v->literal = str[1];
+            }
+        }
       else if (isdigit (str[0])) /* if the first number is a digit we're gonna
                                     automatically assume that it's a number, if
                                     not then that's just cruel homie*/
