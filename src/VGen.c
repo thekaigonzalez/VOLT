@@ -115,118 +115,107 @@ v_generateByteCode (VObject *object, VList *tokens, VCodeGen_Node *_functions,
   VByteCode *main = v_newByteCode ((object));
   VByteCode *tmp = v_newByteCode ((object));
 
-  int pc = 0;
-  int previous = 0;
+  int state = 0;
+  int last_was_main = 0;
 
   for (int i = 0; i < v_listSize (tokens); i++)
     {
       VToken *token = v_listGetToken (tokens, i);
 
-      if (token)
+      if (!token)
+        return NULL;
+
+      if (v_tokenType (token) == v_token_subr_header
+          && (state == 0 || state == 2))
         {
-          if (v_tokenType (token) == v_token_subr_header && pc == 0)
+          if (state == 2)
             {
-              // begin warnings
-              if (compiler != v_compiler_std || compiler != v_compiler_any)
-                {
-                  if (compiler == v_compiler_openlud)
-                    {
-                      printf (
-                          "note(%d): OpenLUD does not support subroutines, "
-                          "skipping.\n",
-                          i);
-                      continue;
-                    }
-
-                  if (strlen (v_tokenName (token)) > 1
-                      && compiler == v_compiler_nexfuse)
-                    {
-                      printf (
-                          "warn: NexFUSE supports 1-character subroutines "
-                          "only. Using first character of `%s' as subroutine "
-                          "name\n",
-                          v_tokenName (token));
-                    }
-                }
-              // end warnings
-
-              // VValue *value = v_tokenToValue (token);
-
-              if (v_valueToByte (token) != 'm') /* main */
-                {
-                  v_appendByteCode (main, 10);
-                  v_appendByteCode (main, v_valueToByte (token));
-                }
-              pc++;
-            }
-
-          else if (v_tokenType (token) == v_token_subr_header && pc == 1)
-            {
-              if (v_valueToByte (token) != 'm') /* main */
-                {
-                  v_appendByteCode (main, 10); // SUB
-                  v_appendByteCode (main, v_valueToByte (token));
-                }
-            }
-
-          else if (v_tokenType (token) == v_token_ident
-                   && strcmp (v_tokenName (token), "ret") == 0)
-            {
-              v_appendByteCode (main, 22); // END
-              v_appendByteCode (main, 11); // ENDSUB
-            }
-
-          else if (v_tokenType (token) == v_token_ident && pc == 1)
-            {
-
-              byte fn
-                  = v_findStandardFunction (v_tokenName (token), _functions);
-
-              if (fn == -127)
-                {
-                  printf ("error: function is not found, `%s'\n",
-                          v_tokenName (token));
-                  exit (1);
-                }
-
-              pc = 2;
-
-              v_appendByteCode (tmp, fn);
-            }
-
-          else if (v_tokenType (token) == v_token_ident && pc == 2)
-            {
-              v_appendByteCode (tmp, v_valueToByte (token));
-
-              byte fn
-                  = v_findStandardFunction (v_tokenName (token), _functions);
-
-              if (fn == -127)
-                {
-                  printf ("error: function is not found, `%s'\n",
-                          v_tokenName (token));
-                  exit (1);
-                }
-
               for (int j = 0; j < v_byteCodeLength (tmp); j++)
                 {
-                  v_appendByteCode (main, (tmp->code[j]));
+                  v_appendByteCode (main, tmp->code[j]);
                 }
 
               v_appendByteCode (main, 0);
 
               memset (tmp->code, 0, tmp->capacity);
-
               tmp->size = 0;
+            }
+          // start warnings
+          if (compiler != v_compiler_any)
+            {
+              if (compiler == v_compiler_openlud)
+                {
+                  printf ("note: OpenLUD does not support subroutines, can "
+                          "not compile\n");
+                  exit (1);
+                }
 
-              pc = 1;
+              if (compiler == v_compiler_nexfuse
+                  && strlen (v_tokenName (token)) > 1)
+                {
+                  printf ("warn: NexFUSE only supports one character "
+                          "subroutines, will use the first letter of `%s` as "
+                          "the subroutine name\n",
+                          v_tokenName (token));
+                }
+            }
+          if (state == 2 && !last_was_main)
+            {
+              v_appendByteCode (main, 22);
+              v_appendByteCode (main, 11); // RET
+
+              last_was_main = 0;
+            }
+          // end warnings
+          state = 1;
+
+          if (v_valueToByte (token) != 'm')
+            {
+              /*initialize the section*/
+              v_appendByteCode (main, 10); // SUB
+              v_appendByteCode (main, v_valueToByte (token));
             }
           else
             {
-              if (pc == 2 && v_tokenType (token) == v_token_param)
-                {
-                  v_appendByteCode (tmp, v_valueToByte (token));
-                }
+              last_was_main = 1;
+            }
+        }
+      else if (v_tokenType (token) == v_token_ident && state == 1)
+        {
+        func:
+          state = 2;
+
+          byte f = v_findStandardFunction (v_tokenName (token), _functions);
+
+          if (f != -127)
+            {
+              v_appendByteCode (main, f);
+            }
+          else
+            {
+              printf ("warn: unknown function `%s`\n", v_tokenName (token));
+            }
+        }
+
+      else if (v_tokenType (token) == v_token_ident && state == 2)
+        {
+          for (int j = 0; j < v_byteCodeLength (tmp); j++)
+            {
+              v_appendByteCode (main, tmp->code[j]);
+            }
+
+          memset (tmp->code, 0, tmp->capacity);
+          tmp->size = 0;
+
+          v_appendByteCode (main, 0);
+
+          goto func;
+        }
+      else
+        {
+          if (v_tokenType (token) == v_token_param && state == 2)
+            {
+              v_appendByteCode (tmp, v_valueToByte (token));
             }
         }
     }
