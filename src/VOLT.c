@@ -16,7 +16,9 @@ VCodeGen_Node standard[]
         { "hlt", 22, v_compiler_std },     { "init", 100, v_compiler_std },
         { "ret", 11, v_compiler_nexfuse }, { "jmp", 15, v_compiler_nexfuse },
         { "use", 70, v_compiler_nexfuse }, { "mov", 41, v_compiler_std },
-        { "each", 42, v_compiler_std } };
+        { "each", 42, v_compiler_std },    { "reset", 43, v_compiler_std },
+        { "clear", 44, v_compiler_std },   { "push", 45, v_compiler_std },
+        { "pop", 46, v_compiler_std },     { NULL, 0, 0 } };
 
 int
 main (int argc, char *argv[])
@@ -76,11 +78,18 @@ main (int argc, char *argv[])
 
   FILE *fp = fopen (filname, "r");
 
+  if (!fp)
+    {
+      printf ("volt: could not open `%s'\n", filname);
+
+      argw_exit (1);
+    }
+
   VBuffer *buffer = v_newBuffer (root);
 
   if (!buffer)
     {
-      return 1;
+      argw_exit (1);
     }
 
   char c;
@@ -99,7 +108,7 @@ main (int argc, char *argv[])
 
   if (!output)
     {
-      return 1;
+      argw_exit (1);
     }
 
   fwrite (byteCode->code, 1, byteCode->size, output);
