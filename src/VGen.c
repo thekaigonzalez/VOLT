@@ -141,7 +141,7 @@ v_generateByteCode (VObject *object, VList *tokens, VCodeGen_Node *_functions,
               tmp->size = 0;
             }
           // start warnings
-          if (compiler != v_compiler_any)
+          if (compiler != v_compiler_any && v_tokenName (token)[0] != 'm')
             {
               if (compiler == v_compiler_openlud)
                 {
@@ -186,6 +186,32 @@ v_generateByteCode (VObject *object, VList *tokens, VCodeGen_Node *_functions,
           state = 2;
 
           byte f = v_findStandardFunction (v_tokenName (token), _functions);
+          VCompilerSupport cs
+              = v_findStandardCompiler (v_tokenName (token), _functions);
+
+          if (compiler != v_compiler_any
+              && (cs != v_compiler_std || cs != v_compiler_any))
+            {
+              if (cs == v_compiler_std)
+                {
+                  goto breakout;
+                }
+              if ((cs == v_compiler_openlud && compiler != v_compiler_openlud))
+                {
+                  printf ("error: function `%s` not supported by OpenLUD\n",
+                          v_tokenName (token));
+                  exit (1);
+                }
+
+              else if ((cs == v_compiler_nexfuse
+                        && compiler != v_compiler_nexfuse))
+                {
+                  printf ("error: function `%s` not supported by NexFUSE\n",
+                          v_tokenName (token));
+                  exit (1);
+                }
+            }
+        breakout:
 
           if (f != -127)
             {
@@ -227,7 +253,14 @@ v_generateByteCode (VObject *object, VList *tokens, VCodeGen_Node *_functions,
         }
       v_appendByteCode (main, 0);
     }
-  v_appendByteCode (main, 22);
+  if (compiler == v_compiler_openlud)
+    {
+      v_appendByteCode (main, 12); // END in OpenLUD
+    }
+  else
+    {
+      v_appendByteCode (main, 22); // Standard END
+    }
 
   return main;
 }
