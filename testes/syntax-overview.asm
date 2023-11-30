@@ -29,9 +29,18 @@ m:
 ; hexadecimal numbers are supported
   echo 0x0a
 
+; `nil' is also supported in VOLT, however, as this functionality is not
+; supported in LR Assembly, it is not supported in OpenLUD either
+; echo can print nil, and since nil is the separating factor in both formats,
+; nil is equal to -127, or the max value of a byte, negatively
+
+; this character looks crazy
+  echo nil
+
 ; this code prints 'AB\n'
 ; no halt instruction is explicity required, but there in case early-exit is
 ; needed
-  hlt
+; however, this functionality is only supported when compiling for NexFUSE
+  ; hlt
 ; every `hlt` instruction looks like a double-end in the bytecode formats, which
 ; you can view using LunarRED's `bytedump' disassembler
