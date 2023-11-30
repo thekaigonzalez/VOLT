@@ -1,5 +1,7 @@
 ; $Id: str.asm
 
+[compat nexfuse] ; nexfuse supports `jmp' and `hlt'
+
 @1:
   mov R1,'h'
   mov R1,'e'
