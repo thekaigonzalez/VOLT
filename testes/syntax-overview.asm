@@ -13,6 +13,10 @@ s:
 ; declaration
 ; on OpenLUD, this is the only subroutine supported, as it does not support true
 ; subroutines
+; do note that if you use 'main' or any longer words as subroutine names, they
+; will be truncated into just 1 character, the starting character, the compiler
+; will warn you once it detects this due to NexFUSE not supporting multi-letter
+; subroutine headers.
 m:
 ; `jmp' is the GOSUB instruction on NexFUSE, OpenLUD does not support this
 ; and that is why it's so important to ensure your code is maintainable
