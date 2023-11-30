@@ -119,14 +119,16 @@ v_lex (VObject *object, char *str)
           state = v_lexer_ignorant;
         }
 
-      else if (c == '\'' && state != v_lexer_simple_literal)
+      else if (c == '\'' && state != v_lexer_simple_literal
+               && state != v_lexer_ignorant)
         {
           v_appendBuffer (buffer, c);
           string_past_state = state;
           state = v_lexer_simple_literal;
         }
 
-      else if (c == '\'' && state == v_lexer_simple_literal)
+      else if (c == '\'' && state == v_lexer_simple_literal
+               && state != v_lexer_ignorant)
         {
           state = string_past_state;
           v_appendBuffer (buffer, c);
