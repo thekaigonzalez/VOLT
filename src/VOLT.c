@@ -13,7 +13,7 @@
 
 VCodeGen_Node standard[]
     = { { "null", 00, v_compiler_std },    { "echo", 40, v_compiler_std },
-        { "hlt", 22, v_compiler_std },     { "int", 100, v_compiler_std },
+        { "hlt", 22, v_compiler_nexfuse }, { "int", 100, v_compiler_std },
         { "ret", 11, v_compiler_nexfuse }, { "jmp", 15, v_compiler_nexfuse },
         { "use", 70, v_compiler_nexfuse }, { "mov", 41, v_compiler_std },
         { "each", 42, v_compiler_std },    { "reset", 43, v_compiler_std },
