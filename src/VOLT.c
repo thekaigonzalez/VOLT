@@ -62,17 +62,17 @@ main (int argc, char *argv[])
       chosenCompiler = v_compiler_openlud;
     }
 
-  if (strcmp (compiler, "nexfuse") == 0)
+  else if (strcmp (compiler, "nexfuse") == 0)
     {
       chosenCompiler = v_compiler_nexfuse;
     }
 
-  if (strcmp (compiler, "std") == 0)
+  else if (strcmp (compiler, "std") == 0)
     {
       chosenCompiler = v_compiler_std;
     }
 
-  if (strcmp (compiler, "any") == 0)
+  else if (strcmp (compiler, "any") == 0)
     {
       chosenCompiler = v_compiler_any;
     }
