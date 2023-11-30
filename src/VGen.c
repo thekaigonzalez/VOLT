@@ -143,10 +143,17 @@ v_generateByteCode (VObject *object, VList *tokens, VCodeGen_Node *_functions,
           // start warnings
           if (compiler != v_compiler_any && v_tokenName (token)[0] != 'm')
             {
+              if (compiler == v_compiler_std)
+                {
+                  printf (
+                      "error: subroutines are not supported in LR Assembly "
+                      "stanards (-Wstd)\n");
+                  exit (1);
+                }
               if (compiler == v_compiler_openlud)
                 {
                   printf ("note: OpenLUD does not support subroutines, can "
-                          "not compile\n");
+                          "not compile (-Wopenlud)\n");
                   exit (1);
                 }
 
@@ -155,7 +162,7 @@ v_generateByteCode (VObject *object, VList *tokens, VCodeGen_Node *_functions,
                 {
                   printf ("warn: NexFUSE only supports one character "
                           "subroutines, will use the first letter of `%s` as "
-                          "the subroutine name\n",
+                          "the subroutine name (-Wnexfuse)\n",
                           v_tokenName (token));
                 }
             }
