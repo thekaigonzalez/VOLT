@@ -55,6 +55,17 @@ v_newValueFromString (VObject *object, char *str)
           v->type = v_nil;
           v->nil = 1;
         }
+
+      else if (strcmp (str, "nil") == 0)
+        {
+          v->type = v_nil;
+          v->nil = 1;
+        }
+      else if (str[0] == '-' && strlen (str) > 1)
+        {
+          v->type = v_number;
+          v->number = strtoull (str, NULL, 10);
+        }
       else if (str[0] == 'R'
                || str[0] == 'r' && strlen (str) > 1
                       && isdigit (str[1])) /* registers */
@@ -109,12 +120,6 @@ v_newValueFromString (VObject *object, char *str)
         {
           v->type = v_number;
           v->number = strtoull (str, NULL, 10); /* base 10 number*/
-        }
-
-      else if (strcmp (str, "nil") == 0)
-        {
-          v->type = v_nil;
-          v->nil = 1;
         }
       else
         {
