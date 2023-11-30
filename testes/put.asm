@@ -1,5 +1,8 @@
 ; $Id: put.asm
 
+; it's always good practice to declare syntax before using it, even if it's any
+[compat std]
+
 main:
   int R1
   int R2

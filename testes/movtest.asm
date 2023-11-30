@@ -1,5 +1,7 @@
 ; mov test
 
+[compat std]
+
 main:
 ; construct string on register 1
   mov R1, 'H'
