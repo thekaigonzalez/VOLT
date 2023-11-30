@@ -3,6 +3,11 @@
 ; comment
 # this is also a comment!
 
+; there's also syntax enforcement via the NEW compiler directives, these are
+; directives which are ignored at codegen, meaning that they are only visible by
+; the compiler and will not be visible at runtime
+[compat nexfuse]
+
 ; subroutines in LR Assembly start with '@' traditionally, however, the flexible
 ; syntax that the VOLT compiler provides also allows you to declare subroutine
 ; names without the '@' prefix
