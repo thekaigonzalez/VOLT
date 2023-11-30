@@ -141,9 +141,11 @@ v_generateByteCode (VObject *object, VList *tokens, VCodeGen_Node *_functions,
               tmp->size = 0;
             }
           // start warnings
-          if (compiler != v_compiler_any && v_tokenName (token)[0] != 'm')
+          if (compiler != v_compiler_any
+              || compiler != v_compiler_nexfuse
+                     && v_tokenName (token)[0] != 'm')
             {
-              if (compiler == v_compiler_std)
+              if (compiler == v_compiler_std && compiler != v_compiler_nexfuse)
                 {
                   printf (
                       "error: subroutines are not supported in LR Assembly "
