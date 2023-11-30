@@ -14,6 +14,9 @@ enum VLexerState
   v_lexer_simple_literal, /* simple literals ('a')*/
   v_lexer_param,          /* parameters (mov r1,0x42)*/
   v_lexer_legacy_header,  /* lunarred-style headers '@' */
+  v_lexer_directive,      /*directives (preprocessing) ([directive <param1>
+                             <param2>])*/
+  v_lexer_directive_param /*directive parameters*/
 };
 
 VList *
@@ -53,6 +56,59 @@ v_lex (VObject *object, char *str)
           v_clearBuffer (buffer);
 
           state = v_lexer_subroutine;
+        }
+
+      else if (c == VTOKEN_DIRECTIVE_BEGIN
+               && state == v_lexer_start) /* header: */
+        {
+          state = v_lexer_directive;
+        }
+
+      else if (c == VTOKEN_DIRECTIVE_END
+               && (state == v_lexer_directive
+                   || state == v_lexer_directive_param)
+               && v_bufferLength (buffer)
+                      > 0) /* [directive <param1> <param2>] */
+        {
+          if (state == v_lexer_directive)
+            {
+              v_listAddToken (list,
+                              v_newTokenPreset (object, v_copyBuffer (buffer),
+                                                v_token_directive));
+            }
+
+          else if (state == v_lexer_directive_param)
+            {
+              v_listAddToken (list,
+                              v_newTokenPreset (object, v_copyBuffer (buffer),
+                                                v_token_directive_param));
+            }
+
+          v_clearBuffer (buffer);
+          state = v_lexer_start;
+        }
+
+      else if (VTOKEN_PARAM_DEF (c)
+               && state
+                      == v_lexer_directive) /* [directive <param1> <param2>] */
+        {
+          v_listAddToken (list,
+                          v_newTokenPreset (object, v_copyBuffer (buffer),
+                                            v_token_directive));
+
+          state = v_lexer_directive_param;
+
+          v_clearBuffer (buffer);
+        }
+
+      else if (VTOKEN_PARAM_DEF (c)
+               && state == v_lexer_directive_param) /* [directive <param1>
+                                                       <param2>] */
+        {
+          v_listAddToken (list,
+                          v_newTokenPreset (object, v_copyBuffer (buffer),
+                                            v_token_directive_param));
+          v_clearBuffer (buffer);
         }
 
       else if (c == '\n' && state == v_lexer_ignorant)
