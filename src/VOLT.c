@@ -49,6 +49,12 @@ main (int argc, char *argv[])
   char *compiler = argw_str ('W');
   char *output_f = argw_str ('o');
 
+  if (compiler == NULL)
+    {
+      printf ("warn: no compiler specified, using 'any'\n");
+      compiler = "any";
+    }
+
   VCompilerSupport chosenCompiler = v_compiler_any;
 
   if (strcmp (compiler, "openlud") == 0)
