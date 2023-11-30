@@ -3,6 +3,9 @@
 # one-letter subroutine names are allowed in NexFUSE but not OpenLUD
 # in the future, there may be fewer restrictions and multiple-letter
 # subroutines will be allowed
+
+[compat std]
+
 @m:
 # move 0x42 into R1
   mov R1,0x42
