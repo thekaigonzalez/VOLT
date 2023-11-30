@@ -10,10 +10,12 @@
 typedef struct VToken VToken;
 typedef enum
 {
-  v_token_ident,       // identifier
-  v_token_param,       // parameter
-  v_token_subr_header, // subroutine header
-  v_token_none,        // none
+  v_token_ident,           // identifier
+  v_token_param,           // parameter
+  v_token_subr_header,     // subroutine header
+  v_token_directive,       // directives (new to v1.1)
+  v_token_directive_param, // directive parameters
+  v_token_none,            // none
 } VTokenType;
 
 /* allocate a new token on object OBJECT */
