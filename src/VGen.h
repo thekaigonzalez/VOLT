@@ -7,6 +7,10 @@
 #include "VOLT.h"
 #include "VObject.h"
 
+#define STATE_COLLECT 2
+
+#define VTOK_COMPAT_DIRECTIVE "compat"
+
 typedef enum VCompilerSupport
 {
   v_compiler_openlud, /* OpenLUD compatibility*/
