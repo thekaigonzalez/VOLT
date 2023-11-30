@@ -189,10 +189,59 @@ v_generateByteCode (VObject *object, VList *tokens, VCodeGen_Node *_functions,
               last_was_main = 1;
             }
         }
+      else if (v_tokenType (token) == v_token_directive)
+        {
+          if (strcmp (v_tokenName (token), VTOK_COMPAT_DIRECTIVE) == 0)
+            {
+              VToken *syntax = v_listGetToken (tokens, i + 1);
+
+              if (!syntax)
+                {
+                  printf (
+                      "error: expected <syntax> after `compat` directive\n");
+                  exit (1);
+                }
+
+              if (compiler != v_compiler_any)
+                {
+                  if (strcmp (v_tokenName (syntax), "openlud") == 0
+                      && compiler != v_compiler_openlud)
+                    {
+                      printf ("`compat: syntax designed for OpenLUD, can not "
+                              "compile. try recompiling with -Wopenlud\n");
+                      exit (1);
+                    }
+                  else if (strcmp (v_tokenName (syntax), "nexfuse") == 0
+                           && compiler != v_compiler_nexfuse)
+                    {
+                      printf ("`compat: syntax designed for NexFUSE, can not "
+                              "compile. try recompiling with -Wnexfuse\n");
+                      exit (1);
+                    }
+
+                  else if (strcmp (v_tokenName (syntax), "std") == 0
+                           && compiler != v_compiler_std)
+                    {
+                      printf ("`compat: syntax can only support standard "
+                              "functions, try recompiling with -Wstd\n");
+                      exit (1);
+                    }
+                  else if (strcmp (v_tokenName (syntax), "any") == 0)
+                    {
+                      compiler = v_compiler_any;
+                    }
+                }
+            }
+          else
+            {
+              printf ("error: unknown directive `%s`\n", v_tokenName (token));
+              exit (1);
+            }
+        }
       else if (v_tokenType (token) == v_token_ident && state == 1)
         {
         func:
-          state = 2;
+          state = STATE_COLLECT;
 
           byte f = v_findStandardFunction (v_tokenName (token), _functions);
           VCompilerSupport cs
@@ -232,6 +281,11 @@ v_generateByteCode (VObject *object, VList *tokens, VCodeGen_Node *_functions,
             }
         }
 
+      else if (v_tokenType (token) == v_token_directive)
+        {
+          printf ("unrecognized directive `%s`\n", v_tokenName (token));
+        }
+
       else if (v_tokenType (token) == v_token_ident && state == 2)
         {
           for (int j = 0; j < v_byteCodeLength (tmp); j++)
@@ -248,7 +302,7 @@ v_generateByteCode (VObject *object, VList *tokens, VCodeGen_Node *_functions,
         }
       else
         {
-          if (v_tokenType (token) == v_token_param && state == 2)
+          if (v_tokenType (token) == v_token_param && state == STATE_COLLECT)
             {
               v_appendByteCode (tmp, v_valueToByte (token));
             }
