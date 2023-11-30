@@ -77,6 +77,13 @@ main (int argc, char *argv[])
       chosenCompiler = v_compiler_any;
     }
 
+  else
+    {
+      printf ("error: unknown compiler `%s'\n", compiler);
+
+      argw_exit (1);
+    }
+
   if (filname == NULL)
     {
       goto help_wanted;
@@ -107,6 +114,7 @@ main (int argc, char *argv[])
   fclose (fp);
 
   VList *lexed = v_lex (root, v_copyBuffer (buffer));
+
   VByteCode *byteCode
       = v_generateByteCode (root, lexed, standard, chosenCompiler);
 
