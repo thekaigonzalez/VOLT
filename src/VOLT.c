@@ -15,7 +15,7 @@ VCodeGen_Node standard[] = { { "null", 00, v_compiler_std },
                              { "echo", 40, v_compiler_std },
                              { "hlt", 22, v_compiler_nexfuse },
                              { "int", 100, v_compiler_std },
-                             { "ret", 11, v_compiler_nexfuse },
+                             { "ret", 0x80, v_compiler_nexfuse },
                              { "jmp", 15, v_compiler_nexfuse },
                              { "use", 70, v_compiler_nexfuse },
                              { "mov", 41, v_compiler_std },
@@ -27,6 +27,8 @@ VCodeGen_Node standard[] = { { "null", 00, v_compiler_std },
                              { "add", 47, v_compiler_nexfuse },
                              { "lar", 48, v_compiler_nexfuse },
                              { "lsl", 49, v_compiler_nexfuse },
+                             { "in", 50, v_compiler_nexfuse },
+                             { "cmp", 51, v_compiler_nexfuse },
                              { NULL, 0, 0 } };
 
 int
