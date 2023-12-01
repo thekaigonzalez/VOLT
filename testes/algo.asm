@@ -7,6 +7,7 @@ a:
 ; increment R1, this will go up until it's equal to 'A'
   inc R1
 ; jump back to comparisons
+; forward referencing
   jmp d
 
 ; it'll just print 'DONE'
