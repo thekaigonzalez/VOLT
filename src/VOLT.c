@@ -18,7 +18,8 @@ VCodeGen_Node standard[]
         { "use", 70, v_compiler_nexfuse }, { "mov", 41, v_compiler_std },
         { "each", 42, v_compiler_std },    { "reset", 43, v_compiler_std },
         { "clear", 44, v_compiler_std },   { "push", 45, v_compiler_std },
-        { "pop", 46, v_compiler_std },     { NULL, 0, 0 } };
+        { "pop", 46, v_compiler_std },     { "add", 47, v_compiler_nexfuse },
+        { "lar", 48, v_compiler_nexfuse }, { NULL, 0, 0 } };
 
 int
 main (int argc, char *argv[])
