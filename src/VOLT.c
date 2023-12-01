@@ -29,6 +29,8 @@ VCodeGen_Node standard[] = { { "null", 00, v_compiler_std },
                              { "lsl", 49, v_compiler_nexfuse },
                              { "in", 50, v_compiler_nexfuse },
                              { "cmp", 51, v_compiler_nexfuse },
+                             { "inc", 52, v_compiler_nexfuse },
+                             { "rep", 53, v_compiler_nexfuse },
                              { NULL, 0, 0 } };
 
 int
