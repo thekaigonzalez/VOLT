@@ -15,7 +15,14 @@ b:
   ; print it
   each R21
 
+s:
+; construct a welcome string
+  lsl R6,'T','y','p','e',' ','"','H','i','"','!',0x0a
+; print it
+  each R6
+
 m:
+  jmp s
 ; get input
   in R1
   in R1
