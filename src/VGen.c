@@ -171,7 +171,7 @@ v_generateByteCode (VObject *object, VList *tokens, VCodeGen_Node *_functions,
           if (state == 2 && !last_was_main)
             {
               v_appendByteCode (main, 22);
-              v_appendByteCode (main, 11); // RET
+              v_appendByteCode (main, 0x80); // RET
 
               last_was_main = 0;
             }
