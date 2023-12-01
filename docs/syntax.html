@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1200, initial-scale=1.0">
+  <title>VOLT Syntax Reference</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="siv">
+
+    <h1>VOLT Syntax Reference</h1>
+
+    <p>note: grammar follows no specification, purely for reference purposes</p>
+    <p>
+      Key: <br>
+      <span class="code">[a-z][0]</span> - character 0 of word <br>
+      <span class="code">[a-z][1]</span> - character 1 of word <br>
+      <span class="code">[a-z][2]</span> - character 2 of word <br>
+
+      <span class="code">[0-9]</span> - number
+      <br>
+
+      <span class="code">0x[a-fA-F0-9]</span> - hex number
+      <br>
+
+      <span class="code">[a-zA-Z0-9]</span> - character
+      <br>
+
+      <span class="code">ident</span> - identifier
+      <br>
+
+      <span class="code">param</span> - parameter
+      <br>
+
+      <span class="code">subr_header</span> - subroutine header
+
+      <br>
+
+      <span class="code">subroutine</span> - subroutine
+
+      <br>
+
+      <span class="code">statement</span> - statement
+      
+      <br>
+
+      <span class="code">statement_call</span> - statement call
+
+      <br>
+
+      <span class="code">char_literal</span> - character literal
+
+      <br>
+
+      <span class="code">hex_literal</span> - hex literal
+
+      <br>
+
+      <span class="code">number_literal</span> - number literal
+
+      <br>
+
+      <span class="code">comment</span> - comment
+
+      <br>
+
+      <span class="code">comment_semi</span> - secondary comment types
+      <hr>
+    </p>
+
+    <pre>
+      # top level
+      document      ::= header*
+      header        ::= subr_header
+      
+      # ignored by compiler
+      comment       ::= #.*
+      comment_semi  ::= ;.*
+      whitespace    ::=
+      macro         ::= '[' [a-z](identifier) param ']'
+      
+      # subroutines
+      subr_header   ::= [a-z][0]      # subroutines can only have 1
+                                      # letter/number
+      subroutine    ::= subr_header statement*
+
+      # statements
+      statement_call ::= ident [param]
+      statement      ::= statement_call
+
+      # parameters
+      param         ::= ([0-9] | [a-z])
+
+      # types
+      char_literal       ::= [a-zA-Z0-9]
+      hex_literal        ::= 0x [a-fA-F0-9]
+      number_literal     ::= [0-9]
+    </pre>
+    <p>Click <a href="index.html">here</a> to return to the home page</p>
+</body>
+
+</html>

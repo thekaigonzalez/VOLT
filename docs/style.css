@@ -1,0 +1,18 @@
+.siv {
+  background-color: rgb(255, 255, 255);
+  border-radius: 10px;
+  border: 1px solid rgb(175, 175, 175);
+  padding: 50px;
+  margin: 0 auto;
+  width: 75%;
+}
+
+body {
+  background-color: rgb(246, 246, 246);
+}
+
+.code {
+  font-family: monospace;
+  font-style: italic;
+  font-weight: bold;
+}
