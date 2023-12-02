@@ -11,18 +11,29 @@
 #include <stdio.h>
 #include <string.h>
 
-VCodeGen_Node standard[]
-    = { { "null", 00, v_compiler_std },      { "echo", 40, v_compiler_std },
-        { "hlt", 22, v_compiler_nexfuse },   { "int", 100, v_compiler_std },
-        { "ret", 0x80, v_compiler_nexfuse }, { "jmp", 15, v_compiler_nexfuse },
-        { "use", 70, v_compiler_nexfuse },   { "mov", 41, v_compiler_std },
-        { "each", 42, v_compiler_std },      { "reset", 43, v_compiler_std },
-        { "clear", 44, v_compiler_std },     { "push", 45, v_compiler_std },
-        { "pop", 46, v_compiler_std },       { "add", 47, v_compiler_nexfuse },
-        { "lar", 48, v_compiler_nexfuse },   { "lsl", 49, v_compiler_nexfuse },
-        { "in", 50, v_compiler_nexfuse },    { "cmp", 51, v_compiler_nexfuse },
-        { "inc", 52, v_compiler_nexfuse },   { "rep", 53, v_compiler_nexfuse },
-        { "rcl", 54, v_compiler_nexfuse },   { NULL, 0, 0 } };
+VCodeGen_Node standard[] = { { "null", 00, v_compiler_std },
+                             { "echo", 40, v_compiler_std },
+                             { "hlt", 22, v_compiler_nexfuse },
+                             { "init", 100, v_compiler_std },
+                             { "ret", 0x80, v_compiler_nexfuse },
+                             { "jmp", 15, v_compiler_nexfuse },
+                             { "use", 70, v_compiler_nexfuse },
+                             { "mov", 41, v_compiler_std },
+                             { "each", 42, v_compiler_std },
+                             { "reset", 43, v_compiler_std },
+                             { "clear", 44, v_compiler_std },
+                             { "push", 45, v_compiler_std },
+                             { "pop", 46, v_compiler_std },
+                             { "add", 47, v_compiler_nexfuse },
+                             { "lar", 48, v_compiler_nexfuse },
+                             { "lsl", 49, v_compiler_nexfuse },
+                             { "in", 50, v_compiler_nexfuse },
+                             { "cmp", 51, v_compiler_nexfuse },
+                             { "inc", 52, v_compiler_nexfuse },
+                             { "rep", 53, v_compiler_nexfuse },
+                             { "rcl", 54, v_compiler_nexfuse },
+                             { "int", 55, v_compiler_mercury },
+                             { NULL, 0, 0 } };
 
 int
 main (int argc, char *argv[])
