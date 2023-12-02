@@ -33,6 +33,12 @@ the short form `-W`.
 ```bash
 volt -Wnexfuse # standard NexFUSE compiler features ONLY
 volt -Wopenlud # standard OpenLUD compiler features ONLY
+
+volt -Wmercury # standard Mercury compiler features ONLY, 
+               # NOTE: this option MUST be used to compile 
+               # binaries for the MercuryPIC VM, as it modifies 
+               # statement delimiters to be supported by MercuryPIC
+
 volt -Wstd # standard NexFUSE + OpenLUD compiler features ONLY, compiler/bytecode extensions disabled
 
 # NOTE: this option disables all compiler warnings, 
