@@ -46,7 +46,7 @@ v_newByteCode (VObject *object)
         {
           bc->object = object;
           bc->code = v_allocateMemory (v_objectPool (object),
-                                       VOLT_DEFAULT_INCREMENT);
+                                       VOLT_DEFAULT_INCREMENT * sizeof (byte));
           if (bc->code != NULL)
             {
               bc->size = 0;
@@ -70,7 +70,7 @@ v_appendByteCode (VByteCode *code, byte data)
     {
       code->capacity += VOLT_DEFAULT_INCREMENT;
       code->code = v_reallocateMemory (v_objectPool (code->object), code->code,
-                                       code->capacity);
+                                       code->capacity * sizeof (byte));
     }
 
   code->code[code->size] = data;
