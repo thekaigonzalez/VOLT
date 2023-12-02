@@ -278,13 +278,11 @@ v_generateByteCode (VObject *object, VList *tokens, VCodeGen_Node *_functions,
                 }
 
               else if (cs == v_compiler_mercury
-                       && compiler != v_compiler_mercury
-                       && compiler != v_compiler_nexfuse)
+                       && compiler != v_compiler_mercury)
                 {
-                  printf (
-                      "error: function `%s` only supported by Mercury/NexFUSE "
-                      "(-Wmercury)\n",
-                      v_tokenName (token));
+                  printf ("error: function `%s` only supported by MercuryPIC "
+                          "(-Wmercury)\n",
+                          v_tokenName (token));
                   exit (1);
                 }
             }
