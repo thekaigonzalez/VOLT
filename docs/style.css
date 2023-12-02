@@ -11,6 +11,10 @@ body {
   background-color: rgb(246, 246, 246);
 }
 
+h1 {
+  color: rgb(21, 0, 0)
+}
+
 .code {
   font-family: monospace;
   font-style: italic;
