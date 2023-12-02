@@ -8,8 +8,8 @@
 
 #define byte char
 
-#define VOLT_VERSION "1.0.0"
-#define VOLT_VERSION_LONG 100L
+#define VOLT_VERSION "1.2.0"
+#define VOLT_VERSION_LONG 120L
 
 #define VOLT_COMPILER_OPENLUD 1
 #define VOLT_COMPILER_NEXFUSE 2
