@@ -19,6 +19,7 @@ typedef enum VCompilerSupport
   v_compiler_nexfuse, /* NexFUSE-based compatibility*/
   v_compiler_std
   = v_compiler_openlud | v_compiler_nexfuse, /* standard compliant functions*/
+  v_compiler_mercury = 4,
 } VCompilerSupport;
 
 typedef struct VCodeGen_Node
