@@ -6,7 +6,7 @@
 #include "VBuffer.h"
 #include "VObject.h"
 
-#define byte char
+#define byte int
 
 #define VOLT_VERSION "1.2.0"
 #define VOLT_VERSION_LONG 120L
