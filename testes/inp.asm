@@ -1,6 +1,6 @@
 ; $Id: inp.asm
 
-[compat nexfuse] ; 'in' is not supported in OpenLUD
+; [compat nexfuse] ; 'in' is not supported in OpenLUD
 
 ; If user types 'Hi'
 h:
