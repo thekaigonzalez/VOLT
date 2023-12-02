@@ -135,14 +135,22 @@ v_generateByteCode (VObject *object, VList *tokens, VCodeGen_Node *_functions,
                   v_appendByteCode (main, tmp->code[j]);
                 }
 
-              v_appendByteCode (main, 0);
+              if (compiler == v_compiler_mercury)
+                {
+                  /* stat end are different in Mercury PIC*/
+                  v_appendByteCode (main, 0xAF);
+                }
+              else
+                {
+                  v_appendByteCode (main, 0);
+                }
 
               memset (tmp->code, 0, tmp->capacity);
               tmp->size = 0;
             }
           // start warnings
-          if (compiler != v_compiler_any
-              || compiler != v_compiler_nexfuse
+          if (compiler != v_compiler_any || compiler != v_compiler_nexfuse
+              || compiler != v_compiler_mercury
                      && v_tokenName (token)[0] != 'm')
             {
               if (compiler == v_compiler_std && compiler != v_compiler_nexfuse)
@@ -268,6 +276,17 @@ v_generateByteCode (VObject *object, VList *tokens, VCodeGen_Node *_functions,
                           v_tokenName (token));
                   exit (1);
                 }
+
+              else if (cs == v_compiler_mercury
+                       && compiler != v_compiler_mercury
+                       && compiler != v_compiler_nexfuse)
+                {
+                  printf (
+                      "error: function `%s` only supported by Mercury/NexFUSE "
+                      "(-Wmercury)\n",
+                      v_tokenName (token));
+                  exit (1);
+                }
             }
         breakout:
 
@@ -296,7 +315,14 @@ v_generateByteCode (VObject *object, VList *tokens, VCodeGen_Node *_functions,
           memset (tmp->code, 0, tmp->capacity);
           tmp->size = 0;
 
-          v_appendByteCode (main, 0);
+          if (compiler == v_compiler_mercury)
+            {
+              v_appendByteCode (main, 0xAF);
+            }
+          else
+            {
+              v_appendByteCode (main, 0);
+            }
 
           goto func;
         }
@@ -314,7 +340,14 @@ v_generateByteCode (VObject *object, VList *tokens, VCodeGen_Node *_functions,
         {
           v_appendByteCode (main, (tmp->code[j]));
         }
-      v_appendByteCode (main, 0);
+      if (compiler == v_compiler_mercury)
+        {
+          v_appendByteCode (main, 0xAF);
+        }
+      else
+        {
+          v_appendByteCode (main, 0);
+        }
     }
 
   if (compiler == v_compiler_openlud)
