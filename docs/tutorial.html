@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1200, initial-scale=1.0">
+  <title>VOLT Tutorial</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <div class="siv">
+    <h1>Your First Program</h1>
+
+    <p>
+      This tutorial will walk you through the basics of writing a LR Assembly
+      program and compiling/executing it with the MercuryVOLT Compiler. VOLT
+      contains an implementation of <i>LunarRED Assembly</i>, which is a
+      simplistic, modern-day assembly-like language designed to be easily
+      compatible between multiple bytecode formats, containing flexible support
+      for assembly features like subroutines, labels, comments, and directives.
+    </p>
+
+    <p>
+      To begin a LR Assembly program, you must first ensure you have the VOLT
+      compiler installed on your device. Depending on your build environment, if
+      you have a Unix-like/Unix-based environment with a viable C compiler, you
+      are able to run `make' from the build directory. You will then have a
+      <span class="code">volt32</span> executable in your current working
+      directory (the one that you ran `make' in).
+    </p>
+
+    <p>As for Windows devices, installing the VOLT compiler will most likely
+      require the installation of <i>Cygwin</i>, providing Unix-style abstractions
+      to ensure that code that is designed for Unix/Linux can run on Windows
+      devices.</p>
+
+    <p>Due to the portable nature of VOLT & it's supported bytecode formats,
+      that may not be needed, as long as a viable C compiler is found on your
+      device, and you can run `make' / build it from scratch commands, it should
+      work perfectly fine. No more than the standard C library is used to design
+      VOLT.</p>
+
+    <p>
+      As of recent updates, a majority of VOLT programs are now 32-bit, to
+      expand features and increase support for a wider variety functionalities
+      and features.
+    </p>
+
+    <h2>64-bit, 32-bit & 8-bit</h2>
+
+    <p>
+      The VOLT compiler supports 32-bit, 64-bit, and 8-bit VMs.
+      Which one you are meant to use however, depends on your specific
+      environment and use cases.
+    </p>
+
+    <p>8-bit compilation is good for smaller, more lenient programs that are
+      meant to run smaller operations at lower levels, such as embedded devices.
+    </p>
+
+    <p>
+      32-bit compilation is good for larger programs that are meant to run
+      higher level projects, such as taking in larger amounts of data or storing
+      subroutine names higher than 255.
+    </p>
+
+    <h2>Program Structure</h2>
+
+    <p>All programs within LR Assembly contain labels, which are similar to
+      functions in other programming languages, however, they are bits of code in
+      your program which control how your program flows, what instructions are
+      meant to be run when, and where.</p>
+
+    <p>
+      You can define a simple subroutine by using the `:' character, which is
+      meant to be placed AFTER the label, signifying the beginning of the
+      subroutine body.
+
+    <div class="some-code">
+      <pre>
+        {label}:
+          instructions
+      </pre>
+    </div>
+
+    <p>
+      In the example above, the `:' character is used to signify the beginning
+      of the subroutine, the name being "label".
+    </p>
+
+    <p>
+      In many different bytecode formats, there is no concept of <b>long</b>
+      subroutine headers, since in their definitions, subroutine headers are
+      defined, then the body is automatically followed, going up until
+      <i>ENDSUB</i> (1) is reached.
+    </p>
+
+    <p>
+      Now the instructions we will use for this example will be LSL (LOADSHIFT)
+      and EACH, both instructions for reading and writing to values in registers.
+    </p>
+
+    <p>
+      Begin your program by specifying the main label, `m', because a majority
+      of VMs support single letter subroutine labels, then use the LOADSHIFT
+      instruction to add a list of characters into a register.
+    </p>
+
+    <div class="some-code">
+      <pre>
+        m:
+        ; append a string to register 1
+        ; 0x0a -> \n in ASCII
+          lsl R1,'H','e','l','l','o',0x0a
+      </pre>
+    </div>
+
+    <p>
+      Don't fret if this code may seem complicated at first, it is very simple.
+      The LSL instruction is used to take any arguments after specifying a
+      retgister, then add them into a register. And ';' is used to signify a
+      comment within your code, however, watch out, because inline comments are
+      not supported!
+    </p>
+
+    <p>
+      As for the characters, you can use any ASCII characters within LR
+      Assembly, because it supports character literals as well as base10 or
+      base16 numbers.
+    </p>
+
+    <h3>Printing the Register</h3>
+
+    <p>
+      To print the register, you would want to use the EACH instruction. This
+      instruction, primarily used as a debugging tool, allows you to print out
+      all non-zero contents in a specified register. Keep in mind, this function
+      is <b>standard</b>, meaning that this function can be used in any VM
+      implementation, due to VOLT's bridging between bytecode formats. It is
+      only when you begin to use something known as <i>compiler extensions</i>,
+      standards begin to become an issue. However, a majority of the time you do
+      not have to worry about this because compilers attempt to bridge every
+      kind of extension into code that can be understood by any other VM or
+      compiler.
+    </p>
+
+    <div class="some-code">
+      <pre>
+        m:
+        ; ...
+          lsl R1,'H','e','l','l','o',0x0a
+
+        ; print the register
+          each R1
+      </pre>
+    </div>
+
+    <p>
+      To compile this code, simply use the <span class="code">volt32</span>
+      command in the same directory as the source code. This source code below
+      shows how you would compile for different VMs.
+
+      <pre>
+        # compile for NexFUSE
+        $ volt32 hello.asm -S nexfuse -o hello.fuse
+
+        # compile for OpenLUD
+        $ volt32 hello.asm -S openlud -o hello.lud
+
+        # compile for MercuryPIC
+        $ volt32 hello.asm -S mercury -o hello.mc
+
+        # compile to only allow standard functions
+        $ volt32 hello.asm -S standard -o hello
+
+        # compile to allow all functions
+        $ volt32 hello.asm -S any -o hello
+      </pre>
+      
+      Then, once completed, simply run your binary that is generated in the
+      current directory with your VM of choice. Like NexFUSE programs would run
+      their apps like this:
+
+      <pre>
+        $ runfuse hello
+      </pre>
+
+      And like that, you have successfully compiled and run your first program.
+      Feel free to explore the source code to learn about different kinds of
+      instructions and VMs, and read the README file to understand how to
+      configure different options.
+    </p>
+  </div>
+</body>
+
+</html>
