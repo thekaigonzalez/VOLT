@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1200, initial-scale=1.0">
+  <title>JADE (VOLT) Handbook</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+
+<body class="paper">
+  <div class="back">
+    <a href="./index.html">Back</a>
+  </div>
+
+  <div class="next">
+    <a href="../1.2.html">Next</a>
+  </div>
+  <div class="siv">
+    <h1>1.1 | Compiler Warnings</h1>
+    <p>There is no concept of compiler warnings, specifically, however,
+      specifying compilers enable different kinds of support for different errors
+      and warnings when compiling.</p>
+    <pre>
+      -Wnexfuse
+          Specifies that warnings for the 
+          NexFUSE binary format should be 
+          enabled.
+            
+      -Wopenlud
+          Specifies that warnings for the 
+          OpenLUD binary format should be 
+          enabled.
+
+      -Wmercury
+          <b>NOTE</b>: this flag is REQUIRED for MercuryPIC binary 
+          files to compile, as they contain different 
+          delimiters and file endings than the rest of 
+          the compilers listed above.
+    </pre>
+  </div>
+</body>
+
+</html>
