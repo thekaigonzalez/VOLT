@@ -16,6 +16,9 @@ to
 #define byte unsigned char
 ```
 
+By default the makefile will already build an 8-bit and 32-bit executable,
+allowing you to compile code for 8-bit VMs or 32-bit VMs.
+
 ## To install
 
 ```bash
