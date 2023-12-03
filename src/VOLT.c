@@ -156,8 +156,7 @@ main (int argc, char *argv[])
       argw_exit (1);
     }
 
-  fwrite (byteCode->code, sizeof (byte), byteCode->size * sizeof (byte),
-          output);
+  fwrite (byteCode->code, sizeof (byte), byteCode->size, output);
 
   fclose (output);
 
