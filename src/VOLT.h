@@ -6,9 +6,17 @@
 #include "VBuffer.h"
 #include "VObject.h"
 
+#ifdef BIT32
 #define byte int
+#else
+#define byte unsigned char
+#endif
 
-#define VOLT_VERSION "1.4.0"
+#ifdef BIT32
+#define VOLT_VERSION "1.4.0 (32-bit)"
+#else
+#define VOLT_VERSION "1.4.0 (8-bit)"
+#endif
 
 #define VOLT_VERSION_LONG 140L
 
