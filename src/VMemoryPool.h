@@ -3,7 +3,10 @@
 #ifndef VMEMORYPOOL_H
 #define VMEMORYPOOL_H
 
+#include <stdbool.h>
 #include <stdlib.h>
+
+#include "VSettings.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -27,6 +30,10 @@ extern "C"
   int v_memoryPoolCapacity (VMemoryPool *pool);
   int v_memoryPoolIncrement (VMemoryPool *pool);
   int v_memoryPoolHardLimit (VMemoryPool *pool);
+
+  /*warnings*/
+  _Bool v_W_warnForBigRegisters (VMemoryPool *pool);
+  void v_W_setWarnForBigRegisters (VMemoryPool *pool, _Bool value);
 
 #ifdef __cplusplus
 }

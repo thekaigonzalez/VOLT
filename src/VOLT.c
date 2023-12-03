@@ -44,6 +44,8 @@ main (int argc, char *argv[])
 
   argw_flag ('o', "output", "Output directory", WString);
   argw_flag ('W', "compiler", "The compiler to use with VOLT", WString);
+  wFlag *warnings = argw_flag (
+      'U', "warning", "Specify certain warnings (new to v1.4.0)", WList);
 
   argw_default ('o', "a.bin");
   argw_default ('c', "any");
@@ -58,6 +60,16 @@ main (int argc, char *argv[])
       wArgParserPrintHelp (parser, argv[0], "[-oc]");
 
       return 0;
+    }
+
+  for (int i = 0; i < wValueListSize (wFlagValue (warnings)); i++)
+    {
+      if (strcmp (wValueListAt (wFlagValue (warnings), i), "no-big-registers")
+          == 0)
+        {
+          VMemoryPool *pool = v_objectPool (root);
+          v_W_setWarnForBigRegisters (pool, false);
+        }
     }
 
   char *filname = argw_positional (0);

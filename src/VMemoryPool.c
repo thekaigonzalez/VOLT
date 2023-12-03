@@ -11,6 +11,8 @@ struct _MemoryPool
 
   int capacity;
   int size;
+
+  _Bool U_warnForBigRegisters;
 };
 
 VMemoryPool *
@@ -33,6 +35,8 @@ v_newMemoryPool (int hardLimit, int softLimit)
       free (pool);
       return NULL;
     }
+
+  pool->U_warnForBigRegisters = true;
 
   return pool;
 }
@@ -144,4 +148,23 @@ v_memoryPoolHardLimit (VMemoryPool *pool)
   if (pool)
     return pool->hardLimit;
   return -1;
+}
+
+_Bool
+v_W_warnForBigRegisters (VMemoryPool *pool)
+{
+  if (pool)
+    {
+      return pool->U_warnForBigRegisters;
+    }
+  return false;
+}
+
+void
+v_W_setWarnForBigRegisters (VMemoryPool *pool, _Bool value)
+{
+  if (pool)
+    {
+      pool->U_warnForBigRegisters = value;
+    }
 }
