@@ -43,9 +43,9 @@ main (int argc, char *argv[])
   argw_init ();
 
   argw_flag ('o', "output", "Output directory", WString);
-  argw_flag ('W', "compiler", "The compiler to use with VOLT", WString);
+  argw_flag ('S', "compiler", "The compiler to use with VOLT", WString);
   wFlag *warnings = argw_flag (
-      'U', "warning", "Specify certain warnings (new to v1.4.0)", WList);
+      'W', "warning", "Specify certain warnings (new to v1.4.0)", WList);
 
   argw_default ('o', "a.bin");
   argw_default ('c', "any");
@@ -73,7 +73,7 @@ main (int argc, char *argv[])
     }
 
   char *filname = argw_positional (0);
-  char *compiler = argw_str ('W');
+  char *compiler = argw_str ('S');
   char *output_f = argw_str ('o');
 
   VCompilerSupport chosenCompiler = v_compiler_any;
