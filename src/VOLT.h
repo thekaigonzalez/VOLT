@@ -8,7 +8,7 @@
 
 #define byte char
 
-#define VOLT_VERSION "1.2.0"
+#define VOLT_VERSION "1.4.0"
 #define VOLT_VERSION_LONG 120L
 
 #define VOLT_COMPILER_OPENLUD 1
