@@ -55,3 +55,9 @@ volt -S std # standard NexFUSE + OpenLUD compiler features ONLY, compiler/byteco
 # do not use if you are uncertain about your code standards.
 volt -S any # any compiler features allowed
 ```
+
+## Compatible Formats
+
+* [NexFUSE](https://github.com/thekaigonzalez/NexFUSE)
+* [OpenLUD OBI](https://github.com/thekaigonzalez/OpenLUD-OBI)
+* [MercuryPIC](https://github.com/thekaigonzalez/MercuryPIC)
