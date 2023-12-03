@@ -15,16 +15,19 @@
 
 [compat mercury]
 
+
 ; first if condition
 1:
 ; if (R1 == R2)
   cmp R1,R2,11,2
+
 
 ; if body
 11:
 ; print("FIRST")
   lsl R10,'F','I','R','S','T',0x0a
   each R10
+
 
 ; second if condition
 2:
@@ -36,6 +39,7 @@
 ; print("SECOND")
   lsl R10,'S','E','C','O','N','D',0x0a
   each R10
+
 
 ; anything else
 3:

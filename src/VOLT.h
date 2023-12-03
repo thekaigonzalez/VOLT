@@ -6,13 +6,11 @@
 #include "VBuffer.h"
 #include "VObject.h"
 
-/*defines a singular byte, this is used for codegen, NOTE: this does not mean
-codegen can support higher than 8-bit data, however, this may be supported in
-the future, when the 32-bit branch is merged into the main branch.*/
-#define byte char
+#define byte int
 
 #define VOLT_VERSION "1.4.0"
-#define VOLT_VERSION_LONG 120L
+
+#define VOLT_VERSION_LONG 140L
 
 /* Number versions of the compilers which VOLT supports */
 #define VOLT_COMPILER_OPENLUD 1

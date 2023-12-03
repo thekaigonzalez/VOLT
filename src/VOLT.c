@@ -156,7 +156,9 @@ main (int argc, char *argv[])
       argw_exit (1);
     }
 
-  fwrite (byteCode->code, 1, byteCode->size, output);
+  fwrite (byteCode->code, sizeof (byte), byteCode->size * sizeof (byte),
+          output);
+
   fclose (output);
 
   v_deleteObject (root);
