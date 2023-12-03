@@ -73,9 +73,17 @@ v_newValueFromString (VObject *object, char *str)
           v->type = v_number;
           v->number = strtoull (str + 1, NULL, 10);
 
-          if (v->number > 256) {
-            printf("warn: register `%d' could potentially overflow (no-overflow)\n", v->number);
-          }
+          _Bool registerWarnings = v_W_warnForBigRegisters (pool);
+
+          if (registerWarnings)
+            {
+              if (v->number > 256)
+                {
+                  printf ("warn: register `%d' could potentially overflow "
+                          "(-Ubig-registers)\n",
+                          v->number);
+                }
+            }
         }
       else if (str[0] == '0' && (str[1] == 'x')) /* obviously for base 16*/
         {
