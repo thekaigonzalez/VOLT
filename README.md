@@ -4,9 +4,17 @@ VOLT is an extremely small, fast, and portable implementation of LR Assembly. It
 is designed to compile for the NexFUSE & OpenLUD platforms, as an alternative to
 the standard LunarRED compiler.
 
-This is the 32-bit version of VOLT, it generates 32-bit binaries, with 4 byte long
-integers. The `main` branch holds 8-bit code generation. This branch is for
-MercuryPIC's 32-Bit Virtual Machine architecture.
+NOTE: to configure VOLT to generate 8-bit binaries, open VOLT.h and change
+
+```c
+#define byte int
+```
+
+to
+
+```c
+#define byte unsigned char
+```
 
 ## To install
 
