@@ -1,4 +1,5 @@
 #include "VValue.h"
+#include "VOLT.h"
 
 #include <ctype.h>
 #include <stdio.h>
@@ -11,7 +12,7 @@ struct VValue
   union
   {
     char literal;
-    int number;
+    byte number;
     int nil;
   };
 };
@@ -54,6 +55,14 @@ v_newValueFromString (VObject *object, char *str)
         {
           v->type = v_nil;
           v->nil = 1;
+        }
+
+      else if (isdigit (str[0])) /* if the first number is a digit we're gonna
+                                  automatically assume that it's a number, if
+                                  not then that's just cruel homie*/
+        {
+          v->type = v_number;
+          v->number = strtoul (str, NULL, 10); /* base 10 number*/
         }
 
       else if (strcmp (str, "nil") == 0)
@@ -126,13 +135,7 @@ v_newValueFromString (VObject *object, char *str)
               v->literal = str[1];
             }
         }
-      else if (isdigit (str[0])) /* if the first number is a digit we're gonna
-                                    automatically assume that it's a number, if
-                                    not then that's just cruel homie*/
-        {
-          v->type = v_number;
-          v->number = strtoull (str, NULL, 10); /* base 10 number*/
-        }
+
       else
         {
           v->type = v_error_type;
