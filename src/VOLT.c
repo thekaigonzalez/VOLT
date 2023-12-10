@@ -153,6 +153,7 @@ main (int argc, char *argv[])
 
   if (!output)
     {
+      v_error (root, "could not open `%s'\n", output_f);
       argw_exit (1);
     }
 
