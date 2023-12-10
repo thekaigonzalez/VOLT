@@ -161,6 +161,8 @@ test_bytecode (void)
   v_appendByteCode (bytecode, 20);
   v_appendByteCode (bytecode, 30);
 
+  v_error (env, "test error");
+
   v_byteCodePrint (bytecode);
 
   v_deleteObject (env);
