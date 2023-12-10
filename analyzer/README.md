@@ -23,3 +23,19 @@ deep analysis:
     problematic: the label in question: `1277'
   my guess is this file is designed for `Mercury PIC (potentially 32-bit)'
 ```
+
+## Covers
+
+* OpenLUD/NexFUSE/MercuryPIC (32-bit & 8-bit)
+* subroutine calls
+* subroutine definitions
+* large numbers
+* segmentation faults
+* security vulnerabilities
+* file architecture
+* file formats
+* file length
+
+## Dependencies
+
+`Perl 5 version 34` *AKA* `5.34.0`
