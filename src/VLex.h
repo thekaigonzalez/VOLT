@@ -18,6 +18,8 @@
 #define VTOKEN_PARAM_DEF(x) isspace (x)  // parameter
 #define VTOKEN_DIRECTIVE_BEGIN '['       // [directive <param>]
 #define VTOKEN_DIRECTIVE_END ']'         // ]
+#define VTOKEN_INLINE_BEGIN '{'          // {inline}
+#define VTOKEN_INLINE_END '}'            // }
 
 typedef enum VLexerState VLexerState;
 

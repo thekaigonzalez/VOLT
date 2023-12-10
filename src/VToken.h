@@ -15,6 +15,7 @@ typedef enum
   v_token_subr_header,     // subroutine header
   v_token_directive,       // directives (new to v1.1)
   v_token_directive_param, // directive parameters
+  v_token_raw,             // raw bytes
   v_token_none,            // none
 } VTokenType;
 

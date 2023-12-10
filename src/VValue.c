@@ -57,9 +57,10 @@ v_newValueFromString (VObject *object, char *str)
           v->nil = 1;
         }
 
-      else if (isdigit (str[0])) /* if the first number is a digit we're gonna
-                                  automatically assume that it's a number, if
-                                  not then that's just cruel homie*/
+      else if (isdigit (str[0])
+               && str[1] != 'x') /* if the first number is a digit we're gonna
+                 automatically assume that it's a number, if
+                 not then that's just cruel homie*/
         {
           v->type = v_number;
           v->number = strtoul (str, NULL, 10); /* base 10 number*/
