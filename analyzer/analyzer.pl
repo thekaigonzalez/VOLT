@@ -25,15 +25,18 @@ my $bold   = "\e[1m";
 
 GetOptions(
     'help'               => \my $help,
-    'format|f!'          => \my $format,
-    'vm|v!'              => \my $vm,
-    'size|s!'            => \my $size,
     'find-gotos|g!'      => \my $find_gotos,
     'vulnerabilities|v!' => \my $vulnerabilities,
 );
 
 sub usage {
     printf( "usage: %s [options...] filename\n", $0 );
+    printf("
+options:
+  -h, --help             show this help message and exit
+  -g, --find-gotos       shows as much information on subroutine calls as possible
+  -v, --vulnerabilities  enables vulnerability analysis
+");
     exit $_[0];
 }
 
