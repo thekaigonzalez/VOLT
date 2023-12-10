@@ -65,6 +65,7 @@ v_deleteMemoryPool (VMemoryPool *pool)
     }
 
   free (pool->ptr);
+  free (pool->ptr_sizes);
   free (pool);
 }
 
