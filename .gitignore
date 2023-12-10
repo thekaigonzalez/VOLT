@@ -7,3 +7,5 @@ str
 *.mc
 volt32
 *.out
+.vstags
+.vscode
