@@ -190,7 +190,14 @@ v_generateByteCode (VObject *object, VList *tokens, VCodeGen_Node *_functions,
             {
               /*initialize the section*/
               v_appendByteCode (main, 10); // SUB
-              v_appendByteCode (main, v_valueToByte (token));
+              byte f = v_valueToByte (token);
+
+              if (f > 255)
+                {
+                  printf ("warn: subroutine name may cause segmentation fault "
+                          "on non-proper architecture (32-bit)\n");
+                }
+              v_appendByteCode (main, f);
             }
           else
             {
