@@ -249,7 +249,8 @@ v_generateByteCode (VObject *object, VList *tokens, VCodeGen_Node *_functions,
             }
           else
             {
-              printf ("error: unknown directive `%s`\n", v_tokenName (token));
+              v_error (object, "unknown directive `%s`\n",
+                       v_tokenName (token));
               exit (1);
             }
         }
@@ -271,25 +272,26 @@ v_generateByteCode (VObject *object, VList *tokens, VCodeGen_Node *_functions,
                 }
               if ((cs == v_compiler_openlud && compiler != v_compiler_openlud))
                 {
-                  printf ("error: function `%s` not supported by OpenLUD\n",
-                          v_tokenName (token));
+                  v_error (object, "function `%s` not supported by OpenLUD\n",
+                           v_tokenName (token));
                   exit (1);
                 }
 
               else if ((cs == v_compiler_nexfuse
                         && compiler != v_compiler_nexfuse))
                 {
-                  printf ("error: function `%s` not supported by NexFUSE\n",
-                          v_tokenName (token));
+                  v_error (object, "function `%s` not supported by NexFUSE\n",
+                           v_tokenName (token));
                   exit (1);
                 }
 
               else if (cs == v_compiler_mercury
                        && compiler != v_compiler_mercury)
                 {
-                  printf ("error: function `%s` only supported by MercuryPIC "
-                          "(-Wmercury)\n",
-                          v_tokenName (token));
+                  v_error (object,
+                           "function `%s` only supported by MercuryPIC "
+                           "(-Wmercury)\n",
+                           v_tokenName (token));
                   exit (1);
                 }
             }
