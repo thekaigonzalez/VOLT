@@ -74,7 +74,8 @@ v_errorWithStackTrace (VObject *object, const char *from_function,
                 }
               else
                 {
-                  printf ("    instance %d asked for heap size of `%d' (%p)\n",
+                  printf ("    instance %d asked for heap size of `%d'      "
+                          "(%p)\n",
                           i, v_memoryPoolSizeof (object->pool, i),
                           v_memoryPoolAt (object->pool, i));
                 }
@@ -82,8 +83,7 @@ v_errorWithStackTrace (VObject *object, const char *from_function,
         }
 
       va_end (args);
-
-      v_deleteMemoryPool (object->pool);
+      v_deleteObject (object);
 
       exit (EXIT_FAILURE);
     }
