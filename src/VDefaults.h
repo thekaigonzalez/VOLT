@@ -8,7 +8,7 @@ can be stored in a pool. */
 #define VOLT_DEFAULT_HARD_LIMIT 1000000
 
 /* VOLT memory increment*/
-#define VOLT_DEFAULT_INCREMENT 25
+#define VOLT_DEFAULT_INCREMENT 50
 
 /* VOLT VM specs*/
 #define VOLT_VM_VERSION "0.0.1"
