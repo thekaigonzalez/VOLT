@@ -30,6 +30,9 @@ extern "C"
   int v_memoryPoolCapacity (VMemoryPool *pool);
   int v_memoryPoolIncrement (VMemoryPool *pool);
   int v_memoryPoolHardLimit (VMemoryPool *pool);
+  int v_memoryPoolSizeof (VMemoryPool *pool, int index);
+
+  void *v_memoryPoolAt (VMemoryPool *pool, int index);
 
   /*warnings*/
   _Bool v_W_warnForBigRegisters (VMemoryPool *pool);
