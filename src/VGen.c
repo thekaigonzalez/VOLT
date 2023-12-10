@@ -312,6 +312,15 @@ v_generateByteCode (VObject *object, VList *tokens, VCodeGen_Node *_functions,
           printf ("unrecognized directive `%s`\n", v_tokenName (token));
         }
 
+      else if (v_tokenType (token) == v_token_raw)
+        {
+          while (v_tokenType (token) == v_token_raw)
+            {
+              v_appendByteCode (main, v_valueToByte (token));
+              token = v_listGetToken (tokens, i++);
+            }
+        }
+
       else if (v_tokenType (token) == v_token_ident && state == 2)
         {
           for (int j = 0; j < v_byteCodeLength (tmp); j++)
