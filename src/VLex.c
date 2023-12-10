@@ -11,19 +11,24 @@ enum VLexerState
   v_lexer_subroutine, /* inside of a subroutine*/
   v_lexer_ignorant,   /* like a string (strings not allowed in LR Assembly, but
                          my point still stands)*/
-  v_lexer_simple_literal, /* simple literals ('a')*/
-  v_lexer_param,          /* parameters (mov r1,0x42)*/
-  v_lexer_legacy_header,  /* lunarred-style headers '@' */
-  v_lexer_directive,      /*directives (preprocessing) ([directive <param1>
-                             <param2>])*/
-  v_lexer_directive_param /*directive parameters*/
+  v_lexer_simple_literal,  /* simple literals ('a')*/
+  v_lexer_param,           /* parameters (mov r1,0x42)*/
+  v_lexer_legacy_header,   /* lunarred-style headers '@' */
+  v_lexer_directive,       /*directives (preprocessing) ([directive <param1>
+                              <param2>])*/
+  v_lexer_directive_param, /*directive parameters*/
+  v_lexer_inline_binary,   /*inline binary*/
+  v_lexer_inline_rest,     /*the rest of inline*/
 };
 
 VList *
 v_lex (VObject *object, char *str)
 {
   int len = strlen (str);
+
   VLexerState state = v_lexer_start;
+  VLexerState previous_state = v_lexer_start;
+
   VBuffer *buffer = v_newBuffer (object);
   VLexerState top_level_state = v_lexer_start;
   VLexerState string_past_state = v_lexer_start;
@@ -56,6 +61,36 @@ v_lex (VObject *object, char *str)
           v_clearBuffer (buffer);
 
           state = v_lexer_subroutine;
+        }
+
+      else if (c == VTOKEN_INLINE_BEGIN
+               && (state != v_lexer_ignorant
+                   || state != v_lexer_simple_literal))
+        { /* {<code>}*/
+          previous_state = state;
+          state = v_lexer_inline_binary;
+          v_clearBuffer (buffer);
+        }
+
+      else if ((VTOKEN_PARAM_DEF (c) || c == VTOKEN_INLINE_END)
+               && state == v_lexer_inline_binary)
+        {
+          v_listAddToken (
+              list,
+              v_newTokenPreset (object, v_copyBuffer (buffer), v_token_raw));
+
+          if (c == VTOKEN_INLINE_END)
+            {
+              state = previous_state;
+              printf ("state now %d\n", state);
+            }
+          v_clearBuffer (buffer);
+        }
+
+      else if (c == VTOKEN_INLINE_END
+               && state == v_lexer_inline_binary) /* {inline <code>}*/
+        {
+          state = v_lexer_inline_rest;
         }
 
       else if (c == VTOKEN_DIRECTIVE_BEGIN
@@ -216,7 +251,7 @@ v_lex (VObject *object, char *str)
       else
         {
           if (!isspace (c) && state != v_lexer_ignorant
-              && state != v_lexer_simple_literal && !ispunct (c))
+              && state != v_lexer_simple_literal && (!ispunct (c) && c != '-'))
             v_appendBuffer (buffer,
                             c); /* append the charaacter to the buffer*/
 
