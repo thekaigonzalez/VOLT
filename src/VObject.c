@@ -57,25 +57,27 @@ v_errorWithStackTrace (VObject *object, const char *from_function,
       fflush (stdout);
       vfprintf (stderr, message, args);
       fflush (stderr);
-      printf ("\n");
       printf ("  Memory Pool Cap. | %d\n",
               v_memoryPoolCapacity (object->pool));
       printf ("  Memory Pool Size | %d\n", v_memoryPoolSize (object->pool));
 
-      printf ("Stack Trace:\n");
-      printf ("  ==============================\n");
-
-      for (int i = 0; i < v_memoryPoolSize (object->pool); i++)
+      if (v_memoryPoolSize (object->pool) > 0)
         {
-          if (!v_memoryPoolAt (object->pool, i))
+          printf ("Stack Trace:\n");
+          printf ("  ==============================\n");
+
+          for (int i = 0; i < v_memoryPoolSize (object->pool); i++)
             {
-              printf ("    %d | (nonexistent)\n", i);
-            }
-          else
-            {
-              printf ("    instance %d asked for heap size of `%d' (%p)\n", i,
-                      v_memoryPoolSizeof (object->pool, i),
-                      v_memoryPoolAt (object->pool, i));
+              if (!v_memoryPoolAt (object->pool, i))
+                {
+                  printf ("    %d | (nonexistent)\n", i);
+                }
+              else
+                {
+                  printf ("    instance %d asked for heap size of `%d' (%p)\n",
+                          i, v_memoryPoolSizeof (object->pool, i),
+                          v_memoryPoolAt (object->pool, i));
+                }
             }
         }
 
