@@ -6,6 +6,7 @@
 struct _MemoryPool
 {
   void **ptr;
+  int *ptr_sizes;
 
   int hardLimit;
 
@@ -27,6 +28,7 @@ v_newMemoryPool (int hardLimit, int softLimit)
   pool->size = 0;
   pool->capacity = softLimit;
   pool->ptr = calloc (softLimit, sizeof (void *));
+  pool->ptr_sizes = calloc (softLimit, sizeof (int));
 
   pool->hardLimit = hardLimit;
 
@@ -78,9 +80,18 @@ v_allocateMemory (VMemoryPool *pool, int size)
     {
       pool->capacity *= 2;
       pool->ptr = realloc (pool->ptr, pool->capacity * sizeof (void *));
+      pool->ptr_sizes
+          = realloc (pool->ptr_sizes, pool->capacity * sizeof (int));
+
+      if (!pool->ptr || !pool->ptr_sizes)
+        {
+          return NULL;
+        }
     }
 
   void *memn = malloc (size);
+
+  pool->ptr_sizes[pool->size] = size;
 
   v_appendMemoryPool (pool, memn);
 
@@ -148,6 +159,33 @@ v_memoryPoolHardLimit (VMemoryPool *pool)
   if (pool)
     return pool->hardLimit;
   return -1;
+}
+
+int
+v_memoryPoolSizeof (VMemoryPool *pool, int index)
+{
+  if (pool)
+    {
+      if (index >= 0 && index < pool->size)
+        {
+          return pool->ptr_sizes[index];
+        }
+    }
+  return 0;
+}
+
+void *
+v_memoryPoolAt (VMemoryPool *pool, int index)
+{
+  if (pool)
+    {
+      if (index >= 0 && index < pool->size)
+        {
+          return pool->ptr[index];
+        }
+    }
+
+  return NULL;
 }
 
 _Bool
