@@ -115,7 +115,7 @@ main (int argc, char *argv[])
 
   else
     {
-      printf ("error: unknown compiler `%s'\n", compiler);
+      v_error (root, "unknown compiler `%s'\n", compiler);
 
       argw_exit (1);
     }
