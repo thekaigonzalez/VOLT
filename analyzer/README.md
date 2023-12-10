@@ -36,6 +36,9 @@ deep analysis:
 * file formats
 * file length
 
+however, VOLT Analyzer will not cover specific VM vulnerabilities such as wrong
+instructions, etc.
+
 ## Dependencies
 
 `Perl 5 version 34` *AKA* `5.34.0`
