@@ -7,7 +7,7 @@
 #include "VObject.h"
 
 #ifdef BIT32
-#define byte int
+#define byte __uint32_t
 #else
 #define byte unsigned char
 #endif
