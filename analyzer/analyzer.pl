@@ -31,12 +31,12 @@ GetOptions(
 
 sub usage {
     printf( "usage: %s [options...] filename\n", $0 );
-    printf("
+    printf( "
 options:
   -h, --help             show this help message and exit
   -g, --find-gotos       shows as much information on subroutine calls as possible
   -v, --vulnerabilities  enables vulnerability analysis
-");
+" );
     exit $_[0];
 }
 
@@ -69,8 +69,8 @@ if ( $len % 4 == 0 ) {
     $width = 4;
     printf("  architecture      : 32-bit\n");
 }
-else {
-    printf("  architecture      : 8-bit OR unknown\n");
+elsif ( $len % 1 == 0 ) {
+    printf("  architecture      : 8-bit\n");
 }
 
 printf("deep analysis:\n");
@@ -85,7 +85,10 @@ my $last_byte;
 my @subroutine_addresses;
 
 while ( read( $fh, my $byte, $width ) ) {
-    my $current_unpacked = unpack( 'I', $byte );
+    my $current_unpacked;
+
+    if    ( $width == 4 ) { $current_unpacked = unpack( 'I', $byte ); }
+    elsif ( $width == 1 ) { $current_unpacked = unpack( 'C', $byte ); }
 
     if ( $current_unpacked == 0xAF and $type_info eq "unknown" ) {
         $type_info = "Mercury PIC ${italic}(potentially 32-bit)${end}";
@@ -96,11 +99,17 @@ while ( read( $fh, my $byte, $width ) ) {
     elsif ( $current_unpacked == 10 )
     {    # SUB definition, store the label into @subroutine_addresses
         read( $fh, $byte, 4 );
-        $current_unpacked = unpack( 'I', $byte );
+
+        if ( $width == 1 ) {
+            $current_unpacked = unpack( 'C', $byte );
+        }
+        else {
+            $current_unpacked = unpack( 'I', $byte );
+        }
 
         push( @subroutine_addresses, $current_unpacked );
 
-        if ($find_gotos) {
+        if ( $find_gotos and $current_unpacked > 0 ) {
             print
 "  ${mag}note${end}: `$current_unpacked' subroutine defined here\n";
 
@@ -115,13 +124,19 @@ while ( read( $fh, my $byte, $width ) ) {
         }
     }
     elsif ( $current_unpacked == 15 ) {
-        read( $fh, $byte, 4 );
-        $current_unpacked = unpack( 'I', $byte );
+        read( $fh, $byte, $width );
+
+        if ( $width == 1 ) {
+            $current_unpacked = unpack( 'C', $byte );
+        }
+        else {
+            $current_unpacked = unpack( 'I', $byte );
+        }
 
         if ($find_gotos) {
             print
 "  ${mag}note${end}: `$current_unpacked' subroutine called here\n";
-            if ( $current_unpacked > 256 ) {
+            if ( $current_unpacked > 256 and $vulnerabilities ) {
                 print
 "    ${yeln}problematic${end}: gosub calls label too high, could potentially cause segmentation fault\n";
                 print
@@ -130,7 +145,12 @@ while ( read( $fh, my $byte, $width ) ) {
 
             # check if this exists in @subroutine_addresses
             if (
-                not( grep { $_ == unpack( 'I', $byte ) } @subroutine_addresses )
+                not(
+                    grep {
+                        $_ == unpack( 'I', $byte ) if $width == 4;
+                        $_ == unpack( 'C', $byte ) if $width == 1;
+                    } @subroutine_addresses
+                )
               )
             {
                 print "${red}problem${end}: `jmp' to non-existent address\n";
