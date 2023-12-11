@@ -13,9 +13,9 @@
 #endif
 
 #ifdef BIT32
-#define VOLT_VERSION "1.4.0 (32-bit)"
+#define VOLT_VERSION "1.5.0 (32-bit)"
 #else
-#define VOLT_VERSION "1.4.0 (8-bit)"
+#define VOLT_VERSION "1.5.0 (8-bit)"
 #endif
 
 #define VOLT_VERSION_LONG 140L
