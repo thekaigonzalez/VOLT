@@ -2,7 +2,7 @@
 
 # $Id: analyzer.pl
 
-my $VERSION = "v1.0.0";
+my $VERSION = "v1.1.0 (for VOLT Compiler v1.5.0)";
 
 use v5.14;
 use strict;
