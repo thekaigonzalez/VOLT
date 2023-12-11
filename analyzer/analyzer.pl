@@ -64,6 +64,7 @@ printf( "  file              : %s\n",             $file );
 printf( "  length            : {%d} bytes\n",     $len );
 
 my $width = 1;
+my $call  = 0;
 
 if ( $len % 4 == 0 ) {
     $width = 4;
@@ -86,14 +87,19 @@ my @subroutine_addresses;
 
 while ( read( $fh, my $byte, $width ) ) {
     my $current_unpacked;
+    $call += 1;
 
     if    ( $width == 4 ) { $current_unpacked = unpack( 'I', $byte ); }
     elsif ( $width == 1 ) { $current_unpacked = unpack( 'C', $byte ); }
 
-    if ( $current_unpacked == 0xAF and $type_info eq "unknown" ) {
+    if (   $current_unpacked == 0xAF and $type_info eq "unknown"
+        or $type_info eq "Mercury PIC ${italic}(potentially 32-bit)${end}" )
+    {
         $type_info = "Mercury PIC ${italic}(potentially 32-bit)${end}";
     }
-    elsif ( $current_unpacked == 0 and $type_info eq "unknown" ) {
+    elsif ($current_unpacked == 0 and $type_info eq "unknown"
+        or $type_info eq "OpenLUD/NexFUSE" )
+    {
         $type_info = "OpenLUD/NexFUSE";
     }
     elsif ( $current_unpacked == 10 )
@@ -110,8 +116,9 @@ while ( read( $fh, my $byte, $width ) ) {
         push( @subroutine_addresses, $current_unpacked );
 
         if ( $find_gotos and $current_unpacked > 0 ) {
-            print
-"  ${mag}note${end}: `$current_unpacked' subroutine defined here\n";
+            printf(
+"  ${mag}note${end}: `$current_unpacked' (letter `%c') subroutine defined here (call %d)\n",
+                $current_unpacked, $call );
 
             if ( $current_unpacked > 256 ) {
                 print(
