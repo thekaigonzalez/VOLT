@@ -72,27 +72,6 @@ v_lex (VObject *object, char *str)
           v_clearBuffer (buffer);
         }
 
-      else if ((VTOKEN_PARAM_DEF (c) || c == VTOKEN_INLINE_END)
-               && state == v_lexer_inline_binary)
-        {
-          v_listAddToken (
-              list,
-              v_newTokenPreset (object, v_copyBuffer (buffer), v_token_raw));
-
-          if (c == VTOKEN_INLINE_END)
-            {
-              state = previous_state;
-              printf ("state now %d\n", state);
-            }
-          v_clearBuffer (buffer);
-        }
-
-      else if (c == VTOKEN_INLINE_END
-               && state == v_lexer_inline_binary) /* {inline <code>}*/
-        {
-          state = v_lexer_inline_rest;
-        }
-
       else if (c == VTOKEN_DIRECTIVE_BEGIN
                && state == v_lexer_start) /* header: */
         {
@@ -216,6 +195,15 @@ v_lex (VObject *object, char *str)
           v_appendBuffer (buffer, c);
           string_past_state = state;
           state = v_lexer_simple_literal;
+        }
+
+      else if (c == ' ' && state == v_lexer_param
+               && v_bufferLength (buffer) > 0)
+        {
+          printf ("volt: error: unexpected parameter separator\n");
+          printf ("[C]: from (%s():%d)\n", __func__, __LINE__);
+          printf ("volt: near: `%s'\n", v_copyBuffer (buffer));
+          exit (1);
         }
 
       else if (c == '\'' && state == v_lexer_simple_literal
